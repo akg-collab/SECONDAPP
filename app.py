@@ -13,7 +13,10 @@ except Exception:
 from langchain_openai import ChatOpenAI
 
 st.set_page_config(page_title="AKG AI Mini Apps", page_icon="🧰")
-st.title("🧰 AKG AI Mini Apps")
+
+# ====== Branded Header ======
+st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 AKG AI Mini Apps</h1>", unsafe_allow_html=True)
+st.caption("Powered by AKG | Email Generator • Startup Idea Generator • More coming soon 🚀")
 
 # ====== Secrets / API Key ======
 with st.expander("🔑 Secrets / API Key check"):
@@ -27,22 +30,24 @@ except Exception:
 
 # ====== Sidebar ======
 st.sidebar.header("Settings")
-model = st.sidebar.selectbox(
-    "OpenAI model",
-    [
-        "gpt-4o-mini",
-        "gpt-4o",
-        "gpt-4.1-mini",
-        "gpt-4.1",
-    ],
-    index=0
-)
+preset_models = [
+    "gpt-4o-mini",
+    "gpt-4o",
+    "gpt-4.1-mini",
+    "gpt-4.1",
+    "gpt-5",
+    "gpt-5-mini",
+]
+model = st.sidebar.selectbox("OpenAI model (preset)", preset_models, index=0)
+custom_model = st.sidebar.text_input("Or type a custom model id", value="", placeholder="e.g., gpt-5-xyz… (optional)")
+use_model = custom_model.strip() if custom_model.strip() else model
+
 temperature = st.sidebar.slider("Temperature", 0.0, 1.2, 0.7, 0.1)
 
 # Build LLM with diagnostics
 def build_llm():
     try:
-        llm = ChatOpenAI(model_name=model, temperature=temperature, timeout=60)
+        llm = ChatOpenAI(model_name=use_model, temperature=temperature, timeout=60)
         return llm, None
     except Exception as e:
         return None, e
@@ -50,15 +55,17 @@ def build_llm():
 llm, llm_err = build_llm()
 
 with st.expander("🔍 Health Check"):
+    st.write(f"Selected model: {use_model}")
     if llm_err:
         st.error(f"LLM init error: {llm_err}")
     else:
         try:
-            ping = llm.invoke("Reply with: OK")
-            st.success(f"Init OK • Model: {model} • Test reply: {ping.content[:50]}")
+            ping = llm.invoke("Reply exactly with: OK")
+            st.success(f"Init OK • Test reply: {ping.content[:50]}")
         except Exception as e:
             st.error("Health check invoke() failed")
             st.exception(e)
+            st.info("Tip: If you see 404 model not found, switch model or type the exact model id you have access to. If 401, check your API key / org access.")
 
 # ====== Apps ======
 st.sidebar.title("Apps")
@@ -130,4 +137,4 @@ if app_choice.startswith("📧"):
 else:
     idea_generator()
 
-st.caption("Tip: switch models in the sidebar if you see 404/401 errors.")
+st.caption("© 2025 AKG | All rights reserved")
