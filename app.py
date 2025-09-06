@@ -15,18 +15,17 @@ from langchain_openai import ChatOpenAI
 st.set_page_config(page_title="Ajay AI Mini Apps", page_icon="🧰")
 
 # ====== Branded Header ======
-st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 Ajay AI Mini Apps</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 AKG AI Mini Apps</h1>", unsafe_allow_html=True)
 st.caption("Made by Ajay 🚀")
 
-# ====== Secrets / API Key ======
-with st.expander("🔑 Secrets / API Key check"):
-    st.write("OPENAI_API_KEY set:", "OPENAI_API_KEY" in st.secrets)
-
-try:
-    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-except Exception:
-    st.error("Missing OPENAI_API_KEY in Streamlit Secrets. Add it in Advanced settings → Secrets.")
+# ====== API Key check (silent unless missing) ======
+if "OPENAI_API_KEY" not in st.secrets:
+    st.error("❌ Missing OPENAI_API_KEY in Streamlit Secrets. Add it in Advanced settings → Secrets.")
+    with st.expander("🔑 Debug Info"):
+        st.write("OPENAI_API_KEY set:", "OPENAI_API_KEY" in st.secrets)
     st.stop()
+
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # ====== Sidebar ======
 st.sidebar.header("Settings")
@@ -38,33 +37,20 @@ preset_models = [
     "gpt-5",
     "gpt-5-mini",
 ]
-model = st.sidebar.selectbox("OpenAI model (preset)", preset_models, index=0)
+model = st.sidebar.selectbox("OpenAI model", preset_models, index=0)
 use_model = model
-
 temperature = st.sidebar.slider("Temperature", 0.0, 1.2, 0.7, 0.1)
 
-# Build LLM with diagnostics
-def build_llm():
-    try:
-        llm = ChatOpenAI(model_name=use_model, temperature=temperature, timeout=60)
-        return llm, None
-    except Exception as e:
-        return None, e
-
-llm, llm_err = build_llm()
-
-with st.expander("🔍 Health Check"):
-    st.write(f"Selected model: {use_model}")
-    if llm_err:
-        st.error(f"LLM init error: {llm_err}")
-    else:
-        try:
-            ping = llm.invoke("Reply exactly with: OK")
-            st.success(f"Init OK • Test reply: {ping.content[:50]}")
-        except Exception as e:
-            st.error("Health check invoke() failed")
-            st.exception(e)
-            st.info("Tip: If you see 404 model not found, switch model or type the exact model id you have access to. If 401, check your API key / org access.")
+# ====== Build LLM (silent unless error) ======
+try:
+    llm = ChatOpenAI(model_name=use_model, temperature=temperature, timeout=60)
+    # Test invoke
+    _ = llm.invoke("Reply with: OK")
+except Exception as e:
+    st.error("❌ LLM Health check failed — check your API key, org access, or model string")
+    with st.expander("🔍 Debug Info"):
+        st.exception(e)
+    st.stop()
 
 # ====== Apps ======
 st.sidebar.title("Apps")
@@ -127,9 +113,6 @@ def idea_generator():
         except Exception as e:
             st.error("Generation failed")
             st.exception(e)
-
-if not llm:
-    st.stop()
 
 if app_choice.startswith("📧"):
     email_generator()
