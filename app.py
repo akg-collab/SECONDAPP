@@ -3,12 +3,7 @@ import streamlit as st
 from langchain.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
-st.set_page_config(page_title="AI Mini Apps", page_icon="🧰")
-
-# ====== Health Check ======
-with st.expander("🔍 Health Check"):
-    st.write("Python:", os.sys.version)
-    st.write("OPENAI_API_KEY set:", "OPENAI_API_KEY" in st.secrets)
+st.set_page_config(page_title="Ajay's AI Mini Apps", page_icon="🧰")
 
 # ====== Secrets / API Key ======
 try:
@@ -18,15 +13,15 @@ except Exception:
     st.stop()
 
 # ====== Sidebar Navigation ======
-st.sidebar.title("🧰 AI Mini Apps")
-app_choice = st.sidebar.radio("Choose a tool:", ["📧 Email Generator", "💡 Startup Idea Generator"])
+st.sidebar.title("🧰 Ajay's AI Mini Apps")
+app_choice = st.sidebar.radio("Choose a tool:", ["📧 Ajay's Email Generator", "💡 Ajay's Startup Idea Generator"])
 
 # ====== Common LLM ======
-llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0.7)
+llm = ChatOpenAI(model_name="gpt5", temperature=0.7)
 
 # ====== Email Generator ======
 def email_generator():
-    st.title("📧 Email Generator")
+    st.title("📧 Ajay's Email Generator")
     subject = st.text_input("Subject")
     sender = st.text_input("Sender")
     tone = st.selectbox("Tone", ["Professional", "Casual", "Polite", "Funny"], index=0)
@@ -52,7 +47,7 @@ def email_generator():
 
 # ====== Startup Idea Generator ======
 def idea_generator():
-    st.title("💡 Startup Idea Generator")
+    st.title("💡 Ajay's Startup Idea Generator")
     industry = st.text_input("🌍 Industry / Domain (e.g., Healthcare, Education, Fintech)")
     audience = st.text_input("👥 Target Audience (e.g., Students, SMEs, Doctors)")
     budget = st.selectbox("💸 Budget Level", ["Low", "Medium", "High"])
