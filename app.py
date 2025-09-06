@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-from langchain import PromptTemplate
+from langchain.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
 st.set_page_config(page_title="AI Mini Apps", page_icon="🧰")
