@@ -16,7 +16,7 @@ st.set_page_config(page_title="AKG AI Mini Apps", page_icon="🧰")
 
 # ====== Branded Header ======
 st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 AKG AI Mini Apps</h1>", unsafe_allow_html=True)
-st.caption("Powered by AKG | Email Generator • Startup Idea Generator • More coming soon 🚀")
+st.caption("Made by AKG 🚀")
 
 # ====== Secrets / API Key ======
 with st.expander("🔑 Secrets / API Key check"):
