@@ -12,10 +12,10 @@ except Exception:
 
 from langchain_openai import ChatOpenAI
 
-st.set_page_config(page_title="Ajay AI Mini Apps", page_icon="🧰")
+st.set_page_config(page_title="AI Mini Apps", page_icon="🧰")
 
 # ====== Branded Header ======
-st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 Ajay's AI Mini Apps</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 AI Mini Apps</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #2c3e50;'>Made by Ajay 🚀</p>", unsafe_allow_html=True)
 
 # ====== API Key check (silent unless missing) ======
