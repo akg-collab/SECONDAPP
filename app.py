@@ -12,11 +12,11 @@ except Exception:
 
 from langchain_openai import ChatOpenAI
 
-st.set_page_config(page_title="AKG AI Mini Apps", page_icon="🧰")
+st.set_page_config(page_title="Ajay AI Mini Apps", page_icon="🧰")
 
 # ====== Branded Header ======
-st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 AKG AI Mini Apps</h1>", unsafe_allow_html=True)
-st.caption("Made by AKG 🚀")
+st.markdown("<h1 style='text-align: center; color: #2c3e50;'>🧰 Ajay AI Mini Apps</h1>", unsafe_allow_html=True)
+st.caption("Made by Ajay 🚀")
 
 # ====== Secrets / API Key ======
 with st.expander("🔑 Secrets / API Key check"):
@@ -39,8 +39,7 @@ preset_models = [
     "gpt-5-mini",
 ]
 model = st.sidebar.selectbox("OpenAI model (preset)", preset_models, index=0)
-custom_model = st.sidebar.text_input("Or type a custom model id", value="", placeholder="e.g., gpt-5-xyz… (optional)")
-use_model = custom_model.strip() if custom_model.strip() else model
+use_model = model
 
 temperature = st.sidebar.slider("Temperature", 0.0, 1.2, 0.7, 0.1)
 
